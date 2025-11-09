@@ -1,0 +1,37 @@
+# Metadata for GitHub Actions marketplace
+name: 'Release from Changelog'
+description: 'Read changelog content and create a GitHub release'
+author: 'Alex Dombroski'
+
+# Branding for marketplace
+branding:
+  icon: 'tag'
+  color: 'blue'
+
+# Inputs for the action
+inputs:
+  changelog-path:
+    description: 'Path to the changelog file'
+    required: false
+    default: 'CHANGELOG.md'
+  version-tag:
+    description: 'Version tag to create release for (e.g., v1.0.0)'
+    required: true
+  github-token:
+    description: 'GitHub token for creating releases'
+    required: true
+    default: ${{ github.token }}
+
+# Outputs from the action
+outputs:
+  release-url:
+    description: 'URL of the created release'
+  release-body:
+    description: 'Content extracted from changelog'
+
+# Action runtime configuration
+runs:
+  using: "composite"
+  steps:
+    - name: Run a command
+    - run: echo "Hello World"
