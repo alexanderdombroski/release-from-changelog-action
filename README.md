@@ -11,18 +11,18 @@ name: Create Release
 on:
   push:
     tags:
-      - '*.*.*'
+      - "*.*.*"
 
 jobs:
   release:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Create Release from Changelog
         uses: alexanderdombroski/release-from-changelog-action@v1
         with:
-          changelog-path: 'CHANGELOG.md'  # Optional, default is CHANGELOG.md
+          changelog-path: "CHANGELOG.md" # Optional, default is CHANGELOG.md
           version-tag: ${{ github.ref_name }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
 ```
@@ -40,17 +40,27 @@ jobs:
 
 ## Changelog Format
 
-The action expects your changelog to follow a standard format with version headers:
+The action expects your changelog to follow recommended [keepachangelog](https://keepachangelog.com/) format with version headers:
 
 ```markdown
 ## [1.0.0] - 2025-01-01
+
 - Feature: Added new functionality
 - Fix: Resolved bug
 
 ## [0.9.0] - 2024-12-01
+
+### Added
+
 - Initial release
+
+### Fixed
+
+- several bugs
 ```
+
+You can use this [vscode snippet](https://github.com/alexanderdombroski/release-from-changelog-action/blob/main/.vscode/markdown.code-snippets) to help create changelog releases.
 
 ## License
 
-MIT License - see [LICENSE](LICENSE) for details
+[![License](https://img.shields.io/github/license/alexanderdombroski/release-from-changelog-action)](https://github.com/alexanderdombroski/release-from-changelog-action?tab=MIT-1-ov-file#readme)

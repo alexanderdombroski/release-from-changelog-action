@@ -16,7 +16,8 @@ yarn-error.log*
 .env.local
 
 # IDE and editor files
-.vscode/
+.vscode/*
+!.vscode/markdown.code-snippets
 .idea/
 *.swp
 *.swo
