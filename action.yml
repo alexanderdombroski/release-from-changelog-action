@@ -24,16 +24,12 @@ inputs:
 # Action runtime configuration
 runs:
   using: "composite"
-  env:
-    GITHUB_TOKEN: $INPUT_GITHUB_TOKEN
-    CHANGELOG_PATH: $INPUT_CHANGELOG_PATH
-    ATTACHMENT_PATH: $INPUT_ATTACHMENT_PATH
 
   steps:
     - name: Check for Changelog
       run: |
-        if [ ! -f "$CHANGELOG_PATH" ]; then
-          echo "$CHANGELOG_PATH not found in $(pwd)"
+        if [ ! -f "${{ inputs.changelog-path }}" ]; then
+          echo "${{ inputs.changelog-path }} not found in $(pwd)"
           exit 1
         fi
 
@@ -52,7 +48,7 @@ runs:
               exit 1
             }
           }
-        ' $CHANGELOG_PATH > release_notes.txt
+        ' ${{ inputs.changelog-path }} > release_notes.txt
 
         TREE_LINK="[Tree](https://github.com/${{ github.repository }}/tree/${{ github.ref_name }})"
         COMMIT_LINK="[Commits](https://github.com/${{ github.repository }}/commits/${{ github.ref_name }})"
@@ -69,8 +65,12 @@ runs:
         gh release create ${{ github.ref_name }} \
           --title "Release ${{ github.ref_name }}" \
           --notes "$RELEASE_BODY"
+      env:
+        GITHUB_TOKEN: ${{ inputs.github-token }}
 
     - name: Upload Attachment
-      if: env.ATTACHMENT_PATH
+      if: ${{ inputs.attachment-path != '' }}
       run: |
-        gh release upload ${{ github.ref_name }} $ATTACHMENT_PATH
+        gh release upload ${{ github.ref_name }} ${{ inputs.attachment-path }}
+      env:
+        GITHUB_TOKEN: ${{ inputs.github-token }}
