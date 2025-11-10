@@ -23,8 +23,8 @@ jobs:
         uses: alexanderdombroski/release-from-changelog-action@v1
         with:
           changelog-path: "CHANGELOG.md" # Optional, default is CHANGELOG.md
-          version-tag: ${{ github.ref_name }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }} # Required
+          attachment-path: dist/main.js # Optional
 ```
 
 ## Inputs
