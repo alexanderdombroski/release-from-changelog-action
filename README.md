@@ -4,7 +4,7 @@ A GitHub Action that reads your changelog file and creates a GitHub release with
 
 ## Usage
 
-Add this step to your workflow to automatically create releases from your changelog:
+Add this step to your workflow to automatically create releases from your changelog whenever a tag is pushed:
 
 ```yaml
 name: Create Release
@@ -18,37 +18,57 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
-      - name: Create Release from Changelog
-        uses: alexanderdombroski/release-from-changelog-action@v1
         with:
-          changelog-path: "CHANGELOG.md" # Optional, default is CHANGELOG.md
+          fetch-depth: 0
+          fetch-tags: true
+
+      # build/deploy steps
+
+      - uses: alexanderdombroski/release-from-changelog-action@v1
+        with:
           github-token: ${{ secrets.GITHUB_TOKEN }} # Required
-          attachment-path: dist/main.js # Optional
 ```
 
-## Inputs
+You can add an attachment to upload with the release.
 
-- **`changelog-path`** (optional): Path to your changelog file. Default: `CHANGELOG.md`
-- **`version-tag`** (required): The version tag to create a release for (e.g., `v1.0.0`)
-- **`github-token`** (required): GitHub token for authentication. Use `${{ secrets.GITHUB_TOKEN }}`
+```yaml
+with:
+  attachment-path: dist/main.js
+```
 
-## Outputs
+You can update the changelog path (case sensitive). The default is `CHANGELOG.md`.
 
-- **`release-url`**: URL of the created GitHub release
-- **`release-body`**: The content extracted from the changelog
+```yaml
+with:
+  changelog-path: "RELEASE_NOTES.md"
+```
+
+## Requirements
+
+- `runs-on` should be some form of linux, or `awk` many not be able to read the changelog
+- Be sure to specify `fetch-depth` and `fetch-tags` on the checkout step
 
 ## Changelog Format
 
-The action expects your changelog to follow recommended [keepachangelog](https://keepachangelog.com/) format with version headers:
+The action expects your changelog to somewhat follow recommended [keepachangelog](https://keepachangelog.com/) format with version headers.
+
+Any of these examples will work if the tags match exactly. Must include at least `## [<tag>]` before each release.
 
 ```markdown
+## [NEW_RELEASE] - 2025-04-01
+
+- New release. We forgot which one we're on or what we updated.
+
+## [v1.5.7]
+
+This update added several new features, but maybe we should have used bullet points.
+
 ## [1.0.0] - 2025-01-01
 
 - Feature: Added new functionality
 - Fix: Resolved bug
 
-## [0.9.0] - 2024-12-01
+## [v0.9] - 2024-12-01
 
 ### Added
 
@@ -56,7 +76,7 @@ The action expects your changelog to follow recommended [keepachangelog](https:/
 
 ### Fixed
 
-- several bugs
+- Several bugs
 ```
 
 You can use this [vscode snippet](https://github.com/alexanderdombroski/release-from-changelog-action/blob/main/.vscode/markdown.code-snippets) to help create changelog releases.
