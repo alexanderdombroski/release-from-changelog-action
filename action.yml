@@ -1,5 +1,5 @@
 # Metadata for GitHub Actions marketplace
-name: 'Release from Changelog'
+name: 'Release from Changelog Action'
 description: 'Copy changelog version summary and create a GitHub release'
 author: 'Alex Dombroski'
 
