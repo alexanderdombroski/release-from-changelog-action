@@ -27,6 +27,7 @@ runs:
 
   steps:
     - name: Check for Changelog
+      shell: bash
       run: |
         if [ ! -f "${{ inputs.changelog-path }}" ]; then
           echo "${{ inputs.changelog-path }} not found in $(pwd)"
@@ -34,7 +35,7 @@ runs:
         fi
 
     - name: Create GitHub Release
-      id: create_release
+      shell: bash
       run: |
         # Use awk to extract the relevant section
         awk '
@@ -70,6 +71,7 @@ runs:
 
     - name: Upload Attachment
       if: ${{ inputs.attachment-path != '' }}
+      shell: bash
       run: |
         gh release upload ${{ github.ref_name }} ${{ inputs.attachment-path }}
       env:
